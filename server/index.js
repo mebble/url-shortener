@@ -1,13 +1,16 @@
+import 'dotenv/config'
 import express from 'express'
 import { MongoClient } from 'mongodb'
 
+const uri = process.env.DB_URI
+const port = Number(process.env.SERVER_PORT)
+
 async function startDatabase() {
-    const uri = "mongodb://127.0.0.1:27017"
     const client = new MongoClient(uri)
 
     let db
     try {
-        db = client.db('demo_api')
+        db = client.db()
     } finally {
         process.once('SIGTERM', async (_signal) => {
             await client.close()
@@ -19,8 +22,7 @@ async function startDatabase() {
 
 async function startApp(db) {
     const app = express()
-    const port = 8080
-    const movies =  db.collection('movies')
+    const movies = db.collection('movies')
 
     app.use(express.json())
 
