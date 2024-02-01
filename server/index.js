@@ -12,7 +12,7 @@ async function startDatabase() {
     try {
         db = client.db()
     } finally {
-        process.once('SIGTERM', async (_signal) => {
+        process.once('SIGINT', async (_signal) => {
             await client.close()
         })
     }
@@ -20,6 +20,9 @@ async function startDatabase() {
     return db
 }
 
+/**
+ * @param {import('mongodb').Db} db
+ */
 async function startApp(db) {
     const app = express()
     const movies = db.collection('movies')

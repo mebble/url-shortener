@@ -5,8 +5,7 @@
   "main": "server/index.js",
   "type": "module",
   "scripts": {
-    "start": "node server/index.js",
-    "watch": "watchexec --watch ./server --restart pnpm start",
+    "watch": "watchexec --watch ./server --restart node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Neil Syiemlieh",
