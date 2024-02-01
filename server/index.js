@@ -1,6 +1,8 @@
 import 'dotenv/config'
 import express from 'express'
 import { MongoClient } from 'mongodb'
+import { parseMovie } from './movies/parse.js'
+import { errResponse } from './movies/controller.js'
 
 const uri = process.env.DB_URI
 const port = Number(process.env.SERVER_PORT)
@@ -29,16 +31,25 @@ async function startApp(db) {
 
     app.use(express.json())
 
-    app.get('/', async (req, res) => {
-        const c = await movies.find()
+    app.get('/', async (_req, res) => {
+        const c = movies.find()
         const m = await c.toArray()
         res.json(m)
     })
 
     app.post('/movies', async (req, res) => {
-        const { title, description } = req.body
-        await movies.insertOne({ title, description })
-        res.end('DONE')
+        const parseRes = parseMovie(req.body)
+        if (!parseRes.success) {
+            errResponse(parseRes.error, res)
+            return
+        }
+
+        const movie = parseRes.data
+        const result = await movies.insertOne(movie)
+        res.json({
+            ...movie,
+            id: result.insertedId
+        })
     })
 
     app.listen(port, () => {
