@@ -22,4 +22,5 @@ pnpm watch
 
 - https://www.mongodb.com/docs/drivers/node/current/quick-start/
 - https://www.mongodb.com/docs/drivers/node/current/quick-reference/
+- https://www.mongodb.com/docs/manual/reference/operator/update/
 - https://vitest.dev/api/expect.html
