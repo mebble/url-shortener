@@ -15,7 +15,8 @@ export default class MovieController {
     async getMovies(_req, res) {
         const cursor = this.movieCollection.find()
         const movies = await cursor.toArray()
-        res.json(movies)
+        const json = movies.map(mapMongoId)
+        res.json(json)
     }
 
     /**
@@ -30,11 +31,17 @@ export default class MovieController {
         }
 
         const movie = parseRes.data
-        const result = await this.movieCollection.insertOne(movie)
-        res.json({
-            ...movie,
-            id: result.insertedId
-        })
+        await this.movieCollection.insertOne(movie)
+        const json = mapMongoId(movie)
+        res.json(json)
+    }
+}
+
+function mapMongoId(model) {
+    const { _id, ...fields } = model
+    return {
+        ...fields,
+        id: _id,
     }
 }
 
