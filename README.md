@@ -1,4 +1,22 @@
-# Starter
+# URL shortener
+
+## Test it out
+
+Post a new url:
+
+```
+curl --location 'localhost:8080/url' \
+--header 'Content-Type: application/json' \
+--data '{
+    "url": "www.youtube.com"
+}'
+```
+
+Get based on short URL:
+
+```
+curl localhost:8080/MJ76C -v
+```
 
 ## DB
 
